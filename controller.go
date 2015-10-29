@@ -321,6 +321,28 @@ func (c *Controller) ServeJson(encoding ...bool) {
 	c.Ctx.Output.Json(c.Data["json"], hasIndent, hasencoding)
 }
 
+
+// ServeJsonAbort
+func (c *Controller) ServeJsonAbort(code string, encoding ...bool) {
+	status, err := strconv.Atoi(code)
+	if err != nil {
+		status = 400
+	}
+	var hasIndent bool
+	var hasencoding bool
+
+	if RunMode == "prod" {
+		hasIndent = false
+	} else {
+		hasIndent = true
+	}
+	if len(encoding) > 0 && encoding[0] == true {
+		hasencoding = true
+	}
+	c.Ctx.Output.Status = status
+	c.Ctx.Output.Json(c.Data["json"], hasIndent, hasencoding)
+}
+
 // ServeJsonp sends a jsonp response.
 func (c *Controller) ServeJsonp() {
 	var hasIndent bool
